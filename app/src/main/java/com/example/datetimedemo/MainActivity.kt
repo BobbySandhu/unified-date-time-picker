@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import com.bobgenix.datetimedialog.AndroidUtilities
+import com.bobgenix.datetimedialog.BottomSheet
 import com.bobgenix.datetimedialog.DialogHelper
 import com.example.datetimedemo.databinding.ActivityMainBinding
 
@@ -17,14 +18,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         AndroidUtilities.checkDisplaySize(this, resources.configuration)
-
         binding.buttonMy.setOnClickListener {
             Log.d("aaaa", "clicked.....")
-            DialogHelper.createDatePickerDialog(
+            val dialog  = DialogHelper.createDatePickerDialog(
                 this,
                 -1,
                 null
             )
+            Log.d("aaaa", "after clicked.....")
         }
     }
 }

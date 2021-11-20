@@ -23,6 +23,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -36,6 +38,10 @@ public class DialogHelper {
         if (context == null) {
             return null;
         }
+
+        formatterScheduleSend[0] = createFormatter(locale, "'Send today at' HH:mm", "'Send today at' HH:mm");
+        formatterScheduleSend[1] = createFormatter(locale, "'Send on' MMM d 'at' HH:mm", "'Send on' MMM d 'at' HH:mm");
+        formatterScheduleSend[2] = createFormatter(locale, "'Send on' MMM d yyyy 'at' HH:mm", "'Send on' MMM d yyyy 'at' HH:mm");
 
         //ScheduleDatePickerColors datePickerColors = new ScheduleDatePickerColors();
         BottomSheet.Builder builder = new BottomSheet.Builder(context, false);
@@ -105,7 +111,7 @@ public class DialogHelper {
 
         titleView.setTextColor(Color.WHITE);
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        //titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        titleView.setTypeface(ResourcesCompat.getFont(context, R.font.rmedium));
         titleLayout.addView(titleView, createFrame(WRAP_CONTENT, WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 12, 0, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
@@ -150,7 +156,7 @@ public class DialogHelper {
             } catch (Exception ignore) {
 
             }
-            checkScheduleDate(null, null, 0, dayPicker, hourPicker, minutePicker);
+            checkScheduleDate(buttonTextView, null, 0, dayPicker, hourPicker, minutePicker);
         };
         dayPicker.setOnValueChangedListener(onValueChangeListener);
 
@@ -191,9 +197,9 @@ public class DialogHelper {
         buttonTextView.setGravity(Gravity.CENTER);
         buttonTextView.setTextColor(Color.WHITE);
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        //buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        buttonTextView.setTypeface(ResourcesCompat.getFont(context, R.font.rmedium));
         buttonTextView.setBackgroundDrawable(createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Color.BLUE, Color.GRAY));
-        buttonTextView.setText("SetTimeLimit");
+        buttonTextView.setText("Set Time Limit");
         container.addView(buttonTextView, createLinear(MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
         buttonTextView.setOnClickListener(v -> {
             canceled[0] = false;

@@ -49,6 +49,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
 import androidx.core.view.ViewCompat;
@@ -377,7 +378,7 @@ public class BottomSheet extends Dialog {
                 keyboardChanged = true;
             }
             keyboardVisible = keyboardHeight > AndroidUtilities.dp(20);
-            if (lastInsets != null && Build.VERSION.SDK_INT >= 21) {
+            if (lastInsets != null) {
                 bottomInset = lastInsets.getSystemWindowInsetBottom();
                 leftInset = lastInsets.getSystemWindowInsetLeft();
                 rightInset = lastInsets.getSystemWindowInsetRight();
@@ -392,14 +393,14 @@ public class BottomSheet extends Dialog {
                 }
             }
             setMeasuredDimension(width, containerHeight);
-            if (lastInsets != null && Build.VERSION.SDK_INT >= 21) {
+            if (lastInsets != null) {
                 int inset = lastInsets.getSystemWindowInsetBottom();
                 if (Build.VERSION.SDK_INT >= 29) {
                     inset += getAdditionalMandatoryOffsets();
                 }
                 height -= inset;
             }
-            if (lastInsets != null && Build.VERSION.SDK_INT >= 21) {
+            if (lastInsets != null) {
                 width -= lastInsets.getSystemWindowInsetRight() + lastInsets.getSystemWindowInsetLeft();
             }
             boolean isPortrait = width < height;
@@ -681,13 +682,13 @@ public class BottomSheet extends Dialog {
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(Color.BLACK);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                //textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                textView.setTypeface(ResourcesCompat.getFont(context, R.font.rmedium));
                 addView(textView, createFrame(MATCH_PARENT, MATCH_PARENT));
             } else if (type == 2) {
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(Color.MAGENTA);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                //textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                textView.setTypeface(ResourcesCompat.getFont(context, R.font.rmedium));
                 textView.setBackground(createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff50a8eb, 0xff439bde));
                 addView(textView, createFrame(MATCH_PARENT, MATCH_PARENT, 0, 16, 16, 16, 16));
             }
@@ -826,9 +827,9 @@ public class BottomSheet extends Dialog {
         super.onCreate(savedInstanceState);
 
         Window window = getWindow();
-        /*if (Build.VERSION.SDK_INT >= 30) {
+        if (Build.VERSION.SDK_INT >= 30) {
             window.setDecorFitsSystemWindows(true);
-        }*/
+        }
         window.setWindowAnimations(R.style.DialogNoAnimation);
         setContentView(container, new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
 
@@ -872,7 +873,7 @@ public class BottomSheet extends Dialog {
             if (bigTitle) {
                 titleView.setTextColor(0xff222222);
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-                //titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                titleView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.rmedium));
                 titleView.setPadding(AndroidUtilities.dp(21), AndroidUtilities.dp(6), AndroidUtilities.dp(21), AndroidUtilities.dp(8));
             } else {
                 titleView.setTextColor(0xff757575);
@@ -996,7 +997,7 @@ public class BottomSheet extends Dialog {
         backDrawable.setAlpha(0);
         if (Build.VERSION.SDK_INT >= 18) {
             layoutCount = 2;
-            containerView.setTranslationY((Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + containerView.getMeasuredHeight());
+            containerView.setTranslationY(AndroidUtilities.statusBarHeight + containerView.getMeasuredHeight());
             startOpenAnimation();
             /*AndroidUtilities.runOnUIThread(startAnimationRunnable = new Runnable() {
                 @Override
@@ -1105,7 +1106,7 @@ public class BottomSheet extends Dialog {
         containerView.setVisibility(View.VISIBLE);
 
         if (!onCustomOpenAnimation()) {
-            if (Build.VERSION.SDK_INT >= 20 && useHardwareLayer) {
+            if (useHardwareLayer) {
                 container.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             }
             containerView.setTranslationY(containerView.getMeasuredHeight());
