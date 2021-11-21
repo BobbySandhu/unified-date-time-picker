@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="TransparentDialog" parent="@android:style/Theme.Dialog">
+    <!--<style name="TransparentDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:background">@null</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -22,6 +22,13 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowFullscreen">false</item>
+    </style>-->
+
+    <style name="TransparentDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:backgroundDimAmount">0.0</item>
     </style>
 
     <style name="DialogNoAnimation">
