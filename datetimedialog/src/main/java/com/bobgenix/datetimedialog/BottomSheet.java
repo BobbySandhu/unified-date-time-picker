@@ -158,7 +158,7 @@ public class BottomSheet extends Dialog {
     private ValueAnimator keyboardContentAnimator;
     protected boolean smoothKeyboardAnimationEnabled;
 
-    protected class ContainerView extends FrameLayout implements NestedScrollingParent {
+    protected class ContainerView extends FrameLayout /*implements NestedScrollingParent */{
 
         private VelocityTracker velocityTracker = null;
         private int startedTrackingX;
@@ -167,7 +167,7 @@ public class BottomSheet extends Dialog {
         private boolean maybeStartTracking = false;
         private boolean startedTracking = false;
         private AnimatorSet currentAnimation = null;
-        private NestedScrollingParentHelper nestedScrollingParentHelper;
+        //private NestedScrollingParentHelper nestedScrollingParentHelper;
         private Rect rect = new Rect();
         private int keyboardHeight;
         private Paint backgroundPaint = new Paint();
@@ -175,7 +175,7 @@ public class BottomSheet extends Dialog {
 
         public ContainerView(Context context) {
             super(context);
-            nestedScrollingParentHelper = new NestedScrollingParentHelper(this);
+            //nestedScrollingParentHelper = new NestedScrollingParentHelper(this);
             setWillNotDraw(false);
         }
 
@@ -458,6 +458,7 @@ public class BottomSheet extends Dialog {
                 if (lastInsets != null && Build.VERSION.SDK_INT >= 21) {
                     l += lastInsets.getSystemWindowInsetLeft();
                 }
+
                 /*if (smoothKeyboardAnimationEnabled && startAnimationRunnable == null && keyboardChanged && !dismissed && containerView.getTop() != t) {
                     containerView.setTranslationY(containerView.getTop() - t);
                     if (keyboardContentAnimator != null) {
@@ -487,6 +488,7 @@ public class BottomSheet extends Dialog {
                 if (child.getVisibility() == GONE || child == containerView) {
                     continue;
                 }
+
                 /*if (!onCustomLayout(child, left, top, right, bottom - (drawNavigationBar ? bottomInset : 0))) {
                     final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 

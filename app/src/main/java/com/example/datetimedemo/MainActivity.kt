@@ -20,12 +20,17 @@ class MainActivity : AppCompatActivity() {
         AndroidUtilities.checkDisplaySize(this, resources.configuration)
         binding.buttonMy.setOnClickListener {
             Log.d("aaaa", "clicked.....")
-            val dialog  = DialogHelper.createDatePickerDialog(
+            DialogHelper.createDatePickerDialog(
                 this,
                 -1,
                 null
             )
             Log.d("aaaa", "after clicked.....")
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Log.d("aaaa", "back pressed...")
     }
 }

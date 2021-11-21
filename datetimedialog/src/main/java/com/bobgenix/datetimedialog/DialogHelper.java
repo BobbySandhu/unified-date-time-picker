@@ -13,6 +13,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
+import android.util.Log;
 import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -191,7 +192,7 @@ public class DialogHelper {
 
         final boolean[] canceled = {true};
 
-        checkScheduleDate(null, null, 0, dayPicker, hourPicker, minutePicker);
+        checkScheduleDate(buttonTextView, null, 0, dayPicker, hourPicker, minutePicker);
 
         buttonTextView.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         buttonTextView.setGravity(Gravity.CENTER);
@@ -199,7 +200,6 @@ public class DialogHelper {
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         buttonTextView.setTypeface(ResourcesCompat.getFont(context, R.font.rmedium));
         buttonTextView.setBackgroundDrawable(createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Color.BLUE, Color.GRAY));
-        buttonTextView.setText("Set Time Limit");
         container.addView(buttonTextView, createLinear(MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
         buttonTextView.setOnClickListener(v -> {
             canceled[0] = false;
@@ -216,6 +216,10 @@ public class DialogHelper {
 
         builder.setCustomView(container);
         BottomSheet bottomSheet = builder.show();
+        bottomSheet.setOnDismissListener(dialog -> {
+            Log.d("aaaa", "dismissed");
+            //builder.getDismissRunnable().run();
+        });
         bottomSheet.setBackgroundColor(Color.RED);
         return builder;
     }
