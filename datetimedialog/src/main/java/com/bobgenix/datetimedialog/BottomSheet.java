@@ -1240,14 +1240,15 @@ public class BottomSheet extends Dialog {
                     if (onClickListener != null) {
                         onClickListener.onClick(BottomSheet.this, item);
                     }
-                    AndroidUtilities.runOnUIThread(() -> {
+                    BottomSheet.super.dismiss();
+                    /*AndroidUtilities.runOnUIThread(() -> {
                         try {
                             BottomSheet.super.dismiss();
                         } catch (Exception e) {
                             e.printStackTrace();
                             //FileLog.e(e);
                         }
-                    });
+                    });*/
                 }
                 //NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
             }
@@ -1308,14 +1309,15 @@ public class BottomSheet extends Dialog {
                     if (currentSheetAnimation != null && currentSheetAnimation.equals(animation)) {
                         currentSheetAnimation = null;
                         currentSheetAnimationType = 0;
-                        AndroidUtilities.runOnUIThread(() -> {
+                        dismissInternal();
+                        /*AndroidUtilities.runOnUIThread(() -> {
                             try {
                                 dismissInternal();
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 //FileLog.e(e);
                             }
-                        });
+                        });*/
                     }
                     //NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
                 }
