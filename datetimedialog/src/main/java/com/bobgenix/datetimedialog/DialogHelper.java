@@ -210,7 +210,7 @@ public class DialogHelper {
             if (setSeconds) {
                 calendar.set(Calendar.SECOND, 0);
             }
-            //datePickerDelegate.didSelectDate(true, (int) (calendar.getTimeInMillis() / 1000));
+            datePickerDelegate.didSelectDate(true, calendar.getTimeInMillis());
             builder.getDismissRunnable().run();
         });
 
@@ -372,6 +372,6 @@ public class DialogHelper {
     }
 
     public interface ScheduleDatePickerDelegate {
-        void didSelectDate(boolean notify, int scheduleDate);
+        void didSelectDate(boolean notify, long scheduleDate);
     }
 }
