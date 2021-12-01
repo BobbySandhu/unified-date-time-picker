@@ -797,28 +797,28 @@ public class BottomSheet extends Dialog {
                 return true;
             }
         };
+
         container.setBackgroundDrawable(backDrawable);
         focusable = needFocus;
-        if (Build.VERSION.SDK_INT >= 21) {
-            container.setFitsSystemWindows(true);
-            container.setOnApplyWindowInsetsListener((v, insets) -> {
-                int newTopInset = insets.getSystemWindowInsetTop();
-                if ((newTopInset != 0) && statusBarHeight != 0 && statusBarHeight != newTopInset) {
-                    statusBarHeight = newTopInset;
-                }
-                lastInsets = insets;
-                v.requestLayout();
-                if (Build.VERSION.SDK_INT >= 30) {
-                    return WindowInsets.CONSUMED;
-                } else {
-                    return insets.consumeSystemWindowInsets();
-                }
-            });
-            if (Build.VERSION.SDK_INT >= 30) {
-                container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |  View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-            } else {
-                container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        container.setFitsSystemWindows(true);
+        container.setOnApplyWindowInsetsListener((v, insets) -> {
+            int newTopInset = insets.getSystemWindowInsetTop();
+            if ((newTopInset != 0) && statusBarHeight != 0 && statusBarHeight != newTopInset) {
+                statusBarHeight = newTopInset;
             }
+            lastInsets = insets;
+            v.requestLayout();
+            if (Build.VERSION.SDK_INT >= 30) {
+                return WindowInsets.CONSUMED;
+            } else {
+                return insets.consumeSystemWindowInsets();
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= 30) {
+            container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |  View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        } else {
+            container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
 
         backDrawable.setAlpha(0);
