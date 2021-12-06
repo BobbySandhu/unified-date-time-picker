@@ -35,6 +35,10 @@ public class UnifiedDateTimePicker {
         this.onDateTimeSelected = builder.onDateTimeSelected;
     }
 
+    public Context getContext() {
+        return this.context;
+    }
+
     public String getTitle() {
         return this.title;
     }
@@ -157,7 +161,7 @@ public class UnifiedDateTimePicker {
             buttonTextSize = AndroidUtilities.dp(size);
             return this;
         }
-        
+
 
         public Builder addListener(OnDateTimeSelectedListener listener) {
             onDateTimeSelected = listener;
@@ -170,6 +174,7 @@ public class UnifiedDateTimePicker {
 
         public void show() {
             UnifiedDateTimePicker unifiedDateTimePicker = build();
+            new UnifiedDateTimePickerHelper(unifiedDateTimePicker).createDatePickerDialog();
         }
     }
 }

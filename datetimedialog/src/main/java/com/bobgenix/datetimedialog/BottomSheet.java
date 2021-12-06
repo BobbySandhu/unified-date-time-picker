@@ -50,9 +50,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.view.NestedScrollingParent;
-import androidx.core.view.NestedScrollingParentHelper;
-import androidx.core.view.ViewCompat;
 
 import java.util.ArrayList;
 
@@ -684,13 +681,13 @@ public class BottomSheet extends Dialog {
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(Color.BLACK);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                textView.setTypeface(ResourcesCompat.getFont(context, R.font.rmedium));
+                textView.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_medium));
                 addView(textView, createFrame(MATCH_PARENT, MATCH_PARENT));
             } else if (type == 2) {
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(Color.MAGENTA);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                textView.setTypeface(ResourcesCompat.getFont(context, R.font.rmedium));
+                textView.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_medium));
                 textView.setBackground(createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff50a8eb, 0xff439bde));
                 addView(textView, createFrame(MATCH_PARENT, MATCH_PARENT, 0, 16, 16, 16, 16));
             }
@@ -875,7 +872,7 @@ public class BottomSheet extends Dialog {
             if (bigTitle) {
                 titleView.setTextColor(0xff222222);
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-                titleView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.rmedium));
+                titleView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.roboto_medium));
                 titleView.setPadding(AndroidUtilities.dp(21), AndroidUtilities.dp(6), AndroidUtilities.dp(21), AndroidUtilities.dp(8));
             } else {
                 titleView.setTextColor(0xff757575);

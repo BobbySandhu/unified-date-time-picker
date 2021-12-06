@@ -4,7 +4,6 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -18,40 +17,54 @@ import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
-import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.Calendar;
 import java.util.Locale;
 
-public class DialogHelper {
-    static Locale locale = new Locale("en");
-    static FastDateFormat formatterScheduleDay = createFormatter(locale, "MMM d", "MMM d");
-    static FastDateFormat formatterScheduleYear = createFormatter(locale, "MMM d yyyy", "MMM d yyyy");
-    static FastDateFormat[] formatterScheduleSend = new FastDateFormat[15];
+public class UnifiedDateTimePickerHelper {
 
-    public static BottomSheet.Builder createDatePickerDialog(Context context, long currentDate, final ScheduleDatePickerDelegate datePickerDelegate) {
+    private Context context;
+    private UnifiedDateTimePicker unifiedDateTimePicker;
+    private long currentDate = -1;
+
+    UnifiedDateTimePickerHelper(UnifiedDateTimePicker unifiedDateTimePicker) {
+        this.context = unifiedDateTimePicker.getContext();
+        this.unifiedDateTimePicker = unifiedDateTimePicker;
+    }
+
+    private Locale locale = new Locale("en");
+    private FastDateFormat formatterScheduleDay = createFormatter(locale, "MMM d", "MMM d");
+    private FastDateFormat formatterScheduleYear = createFormatter(locale, "MMM d yyyy", "MMM d yyyy");
+    private FastDateFormat[] formatterScheduleSend = new FastDateFormat[15];
+
+    public BottomSheet.Builder createDatePickerDialog() {
         if (context == null) {
             return null;
         }
+
+        AndroidUtilities.checkDisplaySize(context.getResources().getConfiguration());
 
         formatterScheduleSend[0] = createFormatter(locale, "'Send today at' HH:mm", "'Send today at' HH:mm");
         formatterScheduleSend[1] = createFormatter(locale, "'Send on' MMM d 'at' HH:mm", "'Send on' MMM d 'at' HH:mm");
         formatterScheduleSend[2] = createFormatter(locale, "'Send on' MMM d yyyy 'at' HH:mm", "'Send on' MMM d yyyy 'at' HH:mm");
 
-        //ScheduleDatePickerColors datePickerColors = new ScheduleDatePickerColors();
         BottomSheet.Builder builder = new BottomSheet.Builder(context, false);
         builder.setApplyBottomPadding(false);
 
         final NumberPicker dayPicker = new NumberPicker(context);
-        dayPicker.setTextColor(Color.WHITE);
+        dayPicker.setTextColor(unifiedDateTimePicker.getDateTimeTextColor());
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
         dayPicker.setItemCount(5);
+        dayPicker.setSelectorColor(unifiedDateTimePicker.getButtonColor());
+
+
         final NumberPicker hourPicker = new NumberPicker(context) {
             @Override
             protected CharSequence getContentDescription(int value) {
@@ -59,8 +72,11 @@ public class DialogHelper {
             }
         };
         hourPicker.setItemCount(5);
-        hourPicker.setTextColor(Color.WHITE);
+        hourPicker.setTextColor(unifiedDateTimePicker.getDateTimeTextColor());
         hourPicker.setTextOffset(-AndroidUtilities.dp(10));
+        hourPicker.setSelectorColor(unifiedDateTimePicker.getButtonTextColor())
+
+
         final NumberPicker minutePicker = new NumberPicker(context) {
             @Override
             protected CharSequence getContentDescription(int value) {
@@ -68,8 +84,9 @@ public class DialogHelper {
             }
         };
         minutePicker.setItemCount(5);
-        minutePicker.setTextColor(Color.WHITE);
+        minutePicker.setTextColor(unifiedDateTimePicker.getDateTimeTextColor());
         minutePicker.setTextOffset(-AndroidUtilities.dp(34));
+        minutePicker.setSelectorColor(unifiedDateTimePicker.getDateTimeTextColor())
 
         LinearLayout container = new LinearLayout(context) {
 
@@ -105,15 +122,14 @@ public class DialogHelper {
         container.setOrientation(LinearLayout.VERTICAL);
 
         FrameLayout titleLayout = new FrameLayout(context);
-        container.addView(titleLayout, createLinear(MATCH_PARENT, WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 22, 0, 0, 4));
+        container.addView(titleLayout, createLinear(MATCH_PARENT, WRAP_CONTENT, Gravity.START | Gravity.TOP, 22, 0, 0, 4));
 
         TextView titleView = new TextView(context);
-        titleView.setText("Schedule message");
-
-        titleView.setTextColor(Color.WHITE);
-        titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        titleView.setTypeface(ResourcesCompat.getFont(context, R.font.rmedium));
-        titleLayout.addView(titleView, createFrame(WRAP_CONTENT, WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 12, 0, 0));
+        titleView.setText(unifiedDateTimePicker.getTitle());
+        titleView.setTextColor(unifiedDateTimePicker.getTitleTextColor());
+        titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, unifiedDateTimePicker.getTextSizeTitle());
+        titleView.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_medium));
+        titleLayout.addView(titleView, createFrame(WRAP_CONTENT, WRAP_CONTENT, Gravity.START | Gravity.TOP, 0, 12, 0, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
         LinearLayout linearLayout = new LinearLayout(context);
@@ -126,7 +142,7 @@ public class DialogHelper {
         calendar.setTimeInMillis(currentTime);
         int currentYear = calendar.get(Calendar.YEAR);
 
-        TextView buttonTextView = new androidx.appcompat.widget.AppCompatTextView(context) {
+        TextView buttonTextView = new AppCompatTextView(context) {
             @Override
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
@@ -134,6 +150,7 @@ public class DialogHelper {
         };
 
         linearLayout.addView(dayPicker, createLinear(0, 54 * 5, 0.5f));
+
         dayPicker.setMinValue(0);
         dayPicker.setMaxValue(365);
         dayPicker.setWrapSelectorWheel(false);
@@ -151,14 +168,18 @@ public class DialogHelper {
                 }
             }
         });
+
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
             try {
-                container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (unifiedDateTimePicker.getVibration()) {
+                    container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                }
             } catch (Exception ignore) {
 
             }
             checkScheduleDate(buttonTextView, null, 0, dayPicker, hourPicker, minutePicker);
         };
+
         dayPicker.setOnValueChangedListener(onValueChangeListener);
 
         hourPicker.setMinValue(0);
@@ -196,9 +217,9 @@ public class DialogHelper {
 
         buttonTextView.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         buttonTextView.setGravity(Gravity.CENTER);
-        buttonTextView.setTextColor(Color.WHITE);
-        buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        buttonTextView.setTypeface(ResourcesCompat.getFont(context, R.font.rmedium));
+        buttonTextView.setTextColor(unifiedDateTimePicker.getButtonColor());
+        buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, unifiedDateTimePicker.getTextSizeButton());
+        buttonTextView.setTypeface(unifiedDateTimePicker.getButtonFont());
         buttonTextView.setBackgroundDrawable(createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Color.BLUE, Color.GRAY));
         container.addView(buttonTextView, createLinear(MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
         buttonTextView.setOnClickListener(v -> {
