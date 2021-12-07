@@ -6,7 +6,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.util.Property;
 import android.view.animation.OvershootInterpolator;
 
-public class AnimationProperties {
+class AnimationProperties {
 
     public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator(1.9f);
 

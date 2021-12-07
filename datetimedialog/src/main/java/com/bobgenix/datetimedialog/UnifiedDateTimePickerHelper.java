@@ -42,14 +42,14 @@ public class UnifiedDateTimePickerHelper {
     private Locale locale = new Locale("en");
     private FastDateFormat formatterScheduleDay = createFormatter(locale, "MMM d", "MMM d");
     private FastDateFormat formatterScheduleYear = createFormatter(locale, "MMM d yyyy", "MMM d yyyy");
-    private FastDateFormat[] formatterScheduleSend = new FastDateFormat[15];
+    private FastDateFormat[] formatterScheduleSend = new FastDateFormat[3];
 
     public BottomSheet.Builder createDatePickerDialog() {
         if (context == null) {
             return null;
         }
 
-        AndroidUtilities.checkDisplaySize(context.getResources().getConfiguration());
+        AndroidUtilities.checkDisplaySize(context, context.getResources().getConfiguration());
 
         formatterScheduleSend[0] = createFormatter(locale, "'Send today at' HH:mm", "'Send today at' HH:mm");
         formatterScheduleSend[1] = createFormatter(locale, "'Send on' MMM d 'at' HH:mm", "'Send on' MMM d 'at' HH:mm");
@@ -64,7 +64,6 @@ public class UnifiedDateTimePickerHelper {
         dayPicker.setItemCount(5);
         dayPicker.setSelectorColor(unifiedDateTimePicker.getButtonColor());
 
-
         final NumberPicker hourPicker = new NumberPicker(context) {
             @Override
             protected CharSequence getContentDescription(int value) {
@@ -74,8 +73,7 @@ public class UnifiedDateTimePickerHelper {
         hourPicker.setItemCount(5);
         hourPicker.setTextColor(unifiedDateTimePicker.getDateTimeTextColor());
         hourPicker.setTextOffset(-AndroidUtilities.dp(10));
-        hourPicker.setSelectorColor(unifiedDateTimePicker.getButtonTextColor())
-
+        hourPicker.setSelectorColor(unifiedDateTimePicker.getButtonColor());
 
         final NumberPicker minutePicker = new NumberPicker(context) {
             @Override
@@ -86,7 +84,7 @@ public class UnifiedDateTimePickerHelper {
         minutePicker.setItemCount(5);
         minutePicker.setTextColor(unifiedDateTimePicker.getDateTimeTextColor());
         minutePicker.setTextOffset(-AndroidUtilities.dp(34));
-        minutePicker.setSelectorColor(unifiedDateTimePicker.getDateTimeTextColor())
+        minutePicker.setSelectorColor(unifiedDateTimePicker.getButtonColor());
 
         LinearLayout container = new LinearLayout(context) {
 
@@ -128,7 +126,7 @@ public class UnifiedDateTimePickerHelper {
         titleView.setText(unifiedDateTimePicker.getTitle());
         titleView.setTextColor(unifiedDateTimePicker.getTitleTextColor());
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, unifiedDateTimePicker.getTextSizeTitle());
-        titleView.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_medium));
+        titleView.setTypeface(unifiedDateTimePicker.getTitleFont());
         titleLayout.addView(titleView, createFrame(WRAP_CONTENT, WRAP_CONTENT, Gravity.START | Gravity.TOP, 0, 12, 0, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
@@ -217,52 +215,56 @@ public class UnifiedDateTimePickerHelper {
 
         buttonTextView.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         buttonTextView.setGravity(Gravity.CENTER);
-        buttonTextView.setTextColor(unifiedDateTimePicker.getButtonColor());
+        buttonTextView.setTextColor(unifiedDateTimePicker.getButtonTextColor());
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, unifiedDateTimePicker.getTextSizeButton());
         buttonTextView.setTypeface(unifiedDateTimePicker.getButtonFont());
-        buttonTextView.setBackgroundDrawable(createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Color.BLUE, Color.GRAY));
-        container.addView(buttonTextView, createLinear(MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
+        buttonTextView.setBackgroundDrawable(createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), unifiedDateTimePicker.getButtonColor(), Color.GRAY));
+        container.addView(buttonTextView, createLinear(MATCH_PARENT, 48, Gravity.START | Gravity.BOTTOM, 16, 15, 16, 16));
+
         buttonTextView.setOnClickListener(v -> {
             canceled[0] = false;
             boolean setSeconds = checkScheduleDate(null, null, 0, dayPicker, hourPicker, minutePicker);
             calendar.setTimeInMillis(System.currentTimeMillis() + (long) dayPicker.getValue() * 24 * 3600 * 1000);
             calendar.set(Calendar.HOUR_OF_DAY, hourPicker.getValue());
             calendar.set(Calendar.MINUTE, minutePicker.getValue());
+
             if (setSeconds) {
                 calendar.set(Calendar.SECOND, 0);
             }
-            datePickerDelegate.didSelectDate(true, calendar.getTimeInMillis());
+
+            unifiedDateTimePicker.getListener().onDateTimeSelected(calendar.getTimeInMillis());
             builder.getDismissRunnable().run();
         });
 
         builder.setCustomView(container);
         BottomSheet bottomSheet = builder.show();
         bottomSheet.setOnDismissListener(dialog -> {
-            Log.d("aaaa", "dismissed");
-            //builder.getDismissRunnable().run();
+            unifiedDateTimePicker.getListener().onPickerDismissed(calendar.getTimeInMillis());
         });
-        bottomSheet.setBackgroundColor(Color.RED);
+
+        bottomSheet.setBackgroundColor(unifiedDateTimePicker.getBackgroundColor());
+
         return builder;
     }
 
-    public static LinearLayout.LayoutParams createLinear(int width, int height, int gravity, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
+    private LinearLayout.LayoutParams createLinear(int width, int height, int gravity, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getSize(width), getSize(height));
         layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
         layoutParams.gravity = gravity;
         return layoutParams;
     }
 
-    public static FrameLayout.LayoutParams createFrame(int width, float height, int gravity, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
+    private FrameLayout.LayoutParams createFrame(int width, float height, int gravity, float leftMargin, float topMargin, float rightMargin, float bottomMargin) {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getSize(width), getSize(height), gravity);
         layoutParams.setMargins(AndroidUtilities.dp(leftMargin), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(rightMargin), AndroidUtilities.dp(bottomMargin));
         return layoutParams;
     }
 
-    private static int getSize(float size) {
+    private int getSize(float size) {
         return (int) (size < 0 ? size : AndroidUtilities.dp(size));
     }
 
-    private static FastDateFormat createFormatter(Locale locale, String format, String defaultFormat) {
+    private FastDateFormat createFormatter(Locale locale, String format, String defaultFormat) {
         if (format == null || format.length() == 0) {
             format = defaultFormat;
         }
@@ -276,11 +278,11 @@ public class UnifiedDateTimePickerHelper {
         return formatter;
     }
 
-    public static boolean checkScheduleDate(TextView button, TextView infoText, int type, NumberPicker dayPicker, NumberPicker hourPicker, NumberPicker minutePicker) {
+    public boolean checkScheduleDate(TextView button, TextView infoText, int type, NumberPicker dayPicker, NumberPicker hourPicker, NumberPicker minutePicker) {
         return checkScheduleDate(button, infoText, 0, type, dayPicker, hourPicker, minutePicker);
     }
 
-    public static boolean checkScheduleDate(TextView button, TextView infoText, long maxDate, int type, NumberPicker dayPicker, NumberPicker hourPicker, NumberPicker minutePicker) {
+    private boolean checkScheduleDate(TextView button, TextView infoText, long maxDate, int type, NumberPicker dayPicker, NumberPicker hourPicker, NumberPicker minutePicker) {
         int day = dayPicker.getValue();
         int hour = hourPicker.getValue();
         int minute = minutePicker.getValue();
@@ -360,19 +362,19 @@ public class UnifiedDateTimePickerHelper {
         return currentTime - systemTime > 60000L;
     }
 
-    public static LinearLayout.LayoutParams createLinear(int width, int height, float weight) {
+    private LinearLayout.LayoutParams createLinear(int width, int height, float weight) {
         return new LinearLayout.LayoutParams(getSize(width), getSize(height), weight);
     }
 
-    public static LinearLayout.LayoutParams createLinear(int width, int height) {
+    private LinearLayout.LayoutParams createLinear(int width, int height) {
         return new LinearLayout.LayoutParams(getSize(width), getSize(height));
     }
 
-    public static Drawable createSimpleSelectorRoundRectDrawable(int rad, int defaultColor, int pressedColor) {
+    private Drawable createSimpleSelectorRoundRectDrawable(int rad, int defaultColor, int pressedColor) {
         return createSimpleSelectorRoundRectDrawable(rad, defaultColor, pressedColor, pressedColor);
     }
 
-    public static Drawable createSimpleSelectorRoundRectDrawable(int rad, int defaultColor, int pressedColor, int maskColor) {
+    private Drawable createSimpleSelectorRoundRectDrawable(int rad, int defaultColor, int pressedColor, int maskColor) {
         ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{rad, rad, rad, rad, rad, rad, rad, rad}, null, null));
         defaultDrawable.getPaint().setColor(defaultColor);
         ShapeDrawable pressedDrawable = new ShapeDrawable(new RoundRectShape(new float[]{rad, rad, rad, rad, rad, rad, rad, rad}, null, null));
@@ -390,9 +392,5 @@ public class UnifiedDateTimePickerHelper {
             stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
             return stateListDrawable;
         }
-    }
-
-    public interface ScheduleDatePickerDelegate {
-        void didSelectDate(boolean notify, long scheduleDate);
     }
 }

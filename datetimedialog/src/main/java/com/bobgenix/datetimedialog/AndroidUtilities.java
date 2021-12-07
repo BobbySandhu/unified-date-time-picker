@@ -24,7 +24,7 @@ import com.bobgenix.ApplicationLoader;
 
 import java.lang.reflect.Field;
 
-public class AndroidUtilities {
+class AndroidUtilities {
     public static int statusBarHeight = 0;
     public static float density = 1;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();

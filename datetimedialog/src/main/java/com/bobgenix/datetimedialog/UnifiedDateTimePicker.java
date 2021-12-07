@@ -1,22 +1,26 @@
 package com.bobgenix.datetimedialog;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
+
+import androidx.core.content.res.ResourcesCompat;
 
 public class UnifiedDateTimePicker {
 
-    private Context context;
-    private String title;
-    private int backgroundColor;
-    private int buttonColor;
-    private int dateTimeTextColor;
-    private int titleTextColor;
-    private int buttonTextColor;
-    private Typeface titleTypeface;
-    private Typeface buttonTypeface;
-    private Boolean enableVibration;
-    private int titleTextSize = 20;
-    private int buttonTextSize = 14;
+    private final Context context;
+    private final String title;
+    private final int backgroundColor;
+    private final int buttonColor;
+    private final int dateTimeTextColor;
+    private final int titleTextColor;
+    private final int buttonTextColor;
+    private final Typeface titleTypeface;
+    private final Typeface buttonTypeface;
+    private final Boolean enableVibration;
+    private int titleTextSize;
+    private int buttonTextSize;
     private OnDateTimeSelectedListener onDateTimeSelected;
 
     private UnifiedDateTimePicker(Builder builder) {
@@ -89,7 +93,9 @@ public class UnifiedDateTimePicker {
 
     public static class Builder {
 
-        private Context context;
+        private String LOG_TAG = "UnifiedDateTimePicker";
+
+        private final Context context;
         private String title;
         private int backgroundColor;
         private int buttonColor;
@@ -105,6 +111,16 @@ public class UnifiedDateTimePicker {
 
         public Builder(Context context) {
             this.context = context;
+            backgroundColor = Color.WHITE;
+            buttonColor = Color.BLUE;
+            dateTimeTextColor = Color.BLACK;
+
+            titleTextColor = Color.BLACK;
+            buttonTextColor = Color.WHITE;
+
+            Typeface defaultTypeface = ResourcesCompat.getFont(context, R.font.roboto_medium);
+            titleTypeface = defaultTypeface;
+            buttonTypeface = defaultTypeface;
         }
 
         public Builder setTitle(String title) {
@@ -173,8 +189,12 @@ public class UnifiedDateTimePicker {
         }
 
         public void show() {
-            UnifiedDateTimePicker unifiedDateTimePicker = build();
-            new UnifiedDateTimePickerHelper(unifiedDateTimePicker).createDatePickerDialog();
+            if (context != null) {
+                UnifiedDateTimePicker unifiedDateTimePicker = build();
+                new UnifiedDateTimePickerHelper(unifiedDateTimePicker).createDatePickerDialog();
+            } else {
+                Log.d(LOG_TAG, "context can not be null.");
+            }
         }
     }
 }
