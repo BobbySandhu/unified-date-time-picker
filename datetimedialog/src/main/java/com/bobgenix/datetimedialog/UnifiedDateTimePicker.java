@@ -19,9 +19,9 @@ public class UnifiedDateTimePicker {
     private final Typeface titleTypeface;
     private final Typeface buttonTypeface;
     private final Boolean enableVibration;
-    private int titleTextSize;
-    private int buttonTextSize;
-    private OnDateTimeSelectedListener onDateTimeSelected;
+    private final int titleTextSize;
+    private final int buttonTextSize;
+    private final OnDateTimeSelectedListener onDateTimeSelected;
 
     private UnifiedDateTimePicker(Builder builder) {
         this.context = builder.context;
@@ -96,7 +96,7 @@ public class UnifiedDateTimePicker {
         private String LOG_TAG = "UnifiedDateTimePicker";
 
         private final Context context;
-        private String title;
+        private String title = "Select Date and Time";
         private int backgroundColor;
         private int buttonColor;
         private int dateTimeTextColor;

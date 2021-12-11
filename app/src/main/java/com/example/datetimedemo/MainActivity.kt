@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonMy.setOnClickListener {
             UnifiedDateTimePicker.Builder(this)
-                .titleTextColor(Color.BLUE)
+                .setTitle("Select Date and Time")
                 .addListener(object : OnDateTimeSelectedListener {
                     override fun onDateTimeSelected(millis: Long) {
                         val sdf = SimpleDateFormat(DATE_FORMAT_Z, Locale.ROOT)
