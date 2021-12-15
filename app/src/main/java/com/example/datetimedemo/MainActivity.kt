@@ -41,9 +41,4 @@ class MainActivity : AppCompatActivity() {
                 .show();
         }
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        Log.d("aaaa", "back pressed...")
-    }
 }
