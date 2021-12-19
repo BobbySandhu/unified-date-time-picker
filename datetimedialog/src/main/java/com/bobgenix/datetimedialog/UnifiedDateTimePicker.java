@@ -22,6 +22,7 @@ public class UnifiedDateTimePicker {
     private final int titleTextSize;
     private final int buttonTextSize;
     private final OnDateTimeSelectedListener onDateTimeSelected;
+    private long millis = 0l;
 
     private UnifiedDateTimePicker(Builder builder) {
         this.context = builder.context;
@@ -37,6 +38,7 @@ public class UnifiedDateTimePicker {
         this.titleTextSize = builder.titleTextSize;
         this.buttonTextSize = builder.buttonTextSize;
         this.onDateTimeSelected = builder.onDateTimeSelected;
+        this.millis = builder.millis;
     }
 
     public Context getContext() {
@@ -91,6 +93,10 @@ public class UnifiedDateTimePicker {
         return this.onDateTimeSelected;
     }
 
+    public long getDateTimeMillis() {
+        return this.millis;
+    }
+
     public static class Builder {
 
         private String LOG_TAG = "UnifiedDateTimePicker";
@@ -108,6 +114,7 @@ public class UnifiedDateTimePicker {
         private int titleTextSize = 20;
         private int buttonTextSize = 14;
         private OnDateTimeSelectedListener onDateTimeSelected;
+        private long millis = 0L;
 
         public Builder(Context context) {
             this.context = context;
@@ -178,9 +185,13 @@ public class UnifiedDateTimePicker {
             return this;
         }
 
-
         public Builder addListener(OnDateTimeSelectedListener listener) {
             onDateTimeSelected = listener;
+            return this;
+        }
+
+        public Builder setDateTimeMillis(long milliSeconds) {
+            millis = milliSeconds;
             return this;
         }
 

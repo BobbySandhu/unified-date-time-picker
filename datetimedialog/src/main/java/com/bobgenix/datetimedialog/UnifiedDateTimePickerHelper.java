@@ -193,15 +193,14 @@ public class UnifiedDateTimePickerHelper {
         linearLayout.addView(minutePicker, createLinear(0, 54 * 5, 0.3f));
         minutePicker.setOnValueChangedListener(onValueChangeListener);
 
-        if (currentDate > 0 && currentDate != 0x7FFFFFFE) {
-            currentDate *= 1000;
+        if (unifiedDateTimePicker.getDateTimeMillis() > 0L && unifiedDateTimePicker.getDateTimeMillis() > currentTime) {
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
             calendar.set(Calendar.HOUR_OF_DAY, 0);
-            int days = (int) ((currentDate - calendar.getTimeInMillis()) / (24 * 60 * 60 * 1000));
-            calendar.setTimeInMillis(currentDate);
+            int days = (int) ((unifiedDateTimePicker.getDateTimeMillis() - currentTime) / (24 * 60 * 60 * 1000));
+            calendar.setTimeInMillis(unifiedDateTimePicker.getDateTimeMillis());
             if (days >= 0) {
                 minutePicker.setValue(calendar.get(Calendar.MINUTE));
                 hourPicker.setValue(calendar.get(Calendar.HOUR_OF_DAY));
