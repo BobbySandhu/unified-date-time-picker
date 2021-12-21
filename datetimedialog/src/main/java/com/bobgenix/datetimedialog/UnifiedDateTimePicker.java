@@ -118,16 +118,21 @@ public class UnifiedDateTimePicker {
 
         public Builder(Context context) {
             this.context = context;
-            backgroundColor = Color.WHITE;
-            buttonColor = Color.BLUE;
-            dateTimeTextColor = Color.BLACK;
 
-            titleTextColor = Color.BLACK;
-            buttonTextColor = Color.WHITE;
+            if (context != null) {
+                backgroundColor = R.color.white;
+                buttonColor = R.color.black;
+                dateTimeTextColor = R.color.black;
 
-            Typeface defaultTypeface = ResourcesCompat.getFont(context, R.font.roboto_medium);
-            titleTypeface = defaultTypeface;
-            buttonTypeface = defaultTypeface;
+                titleTextColor = R.color.black;
+                buttonTextColor = R.color.white;
+
+                Typeface defaultTypeface = ResourcesCompat.getFont(context, R.font.roboto_medium);
+                titleTypeface = defaultTypeface;
+                buttonTypeface = defaultTypeface;
+            } else {
+                Log.d(LOG_TAG, "context can not be null.");
+            }
         }
 
         public Builder setTitle(String title) {

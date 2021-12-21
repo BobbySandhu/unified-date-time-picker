@@ -59,7 +59,7 @@ public class UnifiedDateTimePickerHelper {
         builder.setApplyBottomPadding(false);
 
         final NumberPicker dayPicker = new NumberPicker(context);
-        dayPicker.setTextColor(unifiedDateTimePicker.getDateTimeTextColor());
+        dayPicker.setTextColor(context.getResources().getColor(unifiedDateTimePicker.getDateTimeTextColor()));
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
         dayPicker.setItemCount(5);
         dayPicker.setSelectorColor(unifiedDateTimePicker.getButtonColor());
@@ -71,7 +71,7 @@ public class UnifiedDateTimePickerHelper {
             }
         };
         hourPicker.setItemCount(5);
-        hourPicker.setTextColor(unifiedDateTimePicker.getDateTimeTextColor());
+        hourPicker.setTextColor(context.getResources().getColor(unifiedDateTimePicker.getDateTimeTextColor()));
         hourPicker.setTextOffset(-AndroidUtilities.dp(10));
         hourPicker.setSelectorColor(unifiedDateTimePicker.getButtonColor());
 
@@ -82,7 +82,7 @@ public class UnifiedDateTimePickerHelper {
             }
         };
         minutePicker.setItemCount(5);
-        minutePicker.setTextColor(unifiedDateTimePicker.getDateTimeTextColor());
+        minutePicker.setTextColor(context.getResources().getColor(unifiedDateTimePicker.getDateTimeTextColor()));
         minutePicker.setTextOffset(-AndroidUtilities.dp(34));
         minutePicker.setSelectorColor(unifiedDateTimePicker.getButtonColor());
 
@@ -124,7 +124,7 @@ public class UnifiedDateTimePickerHelper {
 
         TextView titleView = new TextView(context);
         titleView.setText(unifiedDateTimePicker.getTitle());
-        titleView.setTextColor(unifiedDateTimePicker.getTitleTextColor());
+        titleView.setTextColor(context.getResources().getColor(unifiedDateTimePicker.getTitleTextColor()));
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, unifiedDateTimePicker.getTextSizeTitle());
         titleView.setTypeface(unifiedDateTimePicker.getTitleFont());
         titleLayout.addView(titleView, createFrame(WRAP_CONTENT, WRAP_CONTENT, Gravity.START | Gravity.TOP, 0, 12, 0, 0));
@@ -214,10 +214,10 @@ public class UnifiedDateTimePickerHelper {
 
         buttonTextView.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         buttonTextView.setGravity(Gravity.CENTER);
-        buttonTextView.setTextColor(unifiedDateTimePicker.getButtonTextColor());
+        buttonTextView.setTextColor(context.getResources().getColor(unifiedDateTimePicker.getButtonTextColor()));
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, unifiedDateTimePicker.getTextSizeButton());
         buttonTextView.setTypeface(unifiedDateTimePicker.getButtonFont());
-        buttonTextView.setBackgroundDrawable(createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), unifiedDateTimePicker.getButtonColor(), Color.GRAY));
+        buttonTextView.setBackground(createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), unifiedDateTimePicker.getButtonColor(), Color.GRAY));
         container.addView(buttonTextView, createLinear(MATCH_PARENT, 48, Gravity.START | Gravity.BOTTOM, 16, 15, 16, 16));
 
         buttonTextView.setOnClickListener(v -> {
@@ -375,21 +375,14 @@ public class UnifiedDateTimePickerHelper {
 
     private Drawable createSimpleSelectorRoundRectDrawable(int rad, int defaultColor, int pressedColor, int maskColor) {
         ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{rad, rad, rad, rad, rad, rad, rad, rad}, null, null));
-        defaultDrawable.getPaint().setColor(defaultColor);
+        defaultDrawable.getPaint().setColor(context.getResources().getColor(defaultColor));
         ShapeDrawable pressedDrawable = new ShapeDrawable(new RoundRectShape(new float[]{rad, rad, rad, rad, rad, rad, rad, rad}, null, null));
         pressedDrawable.getPaint().setColor(maskColor);
-        if (Build.VERSION.SDK_INT >= 21) {
-            ColorStateList colorStateList = new ColorStateList(
-                    new int[][]{StateSet.WILD_CARD},
-                    new int[]{pressedColor}
-            );
-            return new RippleDrawable(colorStateList, defaultDrawable, pressedDrawable);
-        } else {
-            StateListDrawable stateListDrawable = new StateListDrawable();
-            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
-            stateListDrawable.addState(new int[]{android.R.attr.state_selected}, pressedDrawable);
-            stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
-            return stateListDrawable;
-        }
+
+        ColorStateList colorStateList = new ColorStateList(
+                new int[][]{StateSet.WILD_CARD},
+                new int[]{pressedColor}
+        );
+        return new RippleDrawable(colorStateList, defaultDrawable, pressedDrawable);
     }
 }

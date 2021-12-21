@@ -776,9 +776,8 @@ public class BottomSheet extends Dialog {
         touchSlop = vc.getScaledTouchSlop();
 
         Rect padding = new Rect();
-        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
-        shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xffffffff, PorterDuff.Mode.MULTIPLY));
-        shadowDrawable.getPadding(padding);
+        shadowDrawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.rounded_top_corners, null);
+        //shadowDrawable.getPadding(padding);
         backgroundPaddingLeft = padding.left;
         backgroundPaddingTop = padding.top;
 
@@ -857,7 +856,7 @@ public class BottomSheet extends Dialog {
                     onContainerTranslationYChanged(translationY);
                 }
             };
-            containerView.setBackgroundDrawable(shadowDrawable);
+            containerView.setBackground(shadowDrawable);
             containerView.setPadding(backgroundPaddingLeft, (applyTopPadding ? AndroidUtilities.dp(8) : 0) + backgroundPaddingTop - 1, backgroundPaddingLeft, (applyBottomPadding ? AndroidUtilities.dp(8) : 0));
         }
         containerView.setVisibility(View.INVISIBLE);
@@ -976,7 +975,7 @@ public class BottomSheet extends Dialog {
     }
 
     public void setBackgroundColor(int color) {
-        shadowDrawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        shadowDrawable.setColorFilter(getContext().getResources().getColor(color), PorterDuff.Mode.MULTIPLY);
     }
 
     @Override

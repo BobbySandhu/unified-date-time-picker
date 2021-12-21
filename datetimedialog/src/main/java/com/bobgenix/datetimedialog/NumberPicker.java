@@ -223,7 +223,7 @@ public class NumberPicker extends LinearLayout {
     }
 
     public void setSelectorColor(int color) {
-        mSelectionDivider.setColor(color);
+        mSelectionDivider.setColor(getContext().getResources().getColor(color));
     }
 
     public NumberPicker(Context context) {
