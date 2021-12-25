@@ -49,7 +49,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.BlendModeColorFilterCompat;
+import androidx.core.graphics.BlendModeCompat;
 
 import java.util.ArrayList;
 
@@ -975,7 +978,12 @@ public class BottomSheet extends Dialog {
     }
 
     public void setBackgroundColor(int color) {
-        shadowDrawable.setColorFilter(getContext().getResources().getColor(color), PorterDuff.Mode.MULTIPLY);
+        shadowDrawable.setColorFilter(
+                BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                        ContextCompat.getColor(getContext(), color),
+                        BlendModeCompat.SRC_ATOP
+                )
+        );
     }
 
     @Override
