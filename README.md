@@ -68,7 +68,7 @@ With all these customizations applied, it would look like:
     
     // Project level dependencies section
     dependencies {
-        implementation 'io.github.bobbysandhu:unified-date-time-picker:1.0.0'
+        implementation 'io.github.bobbysandhu:unified-date-time-picker:1.0.1'
     }
 
 Want to extend the feature, have any improvement or bug fix? 
