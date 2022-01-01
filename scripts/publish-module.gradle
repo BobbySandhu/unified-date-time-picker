@@ -43,6 +43,10 @@ afterEvaluate {
 
                 // Mostly self-explanatory metadata
                 pom {
+                    /*signing {
+                        sign publishing.publications
+                        sign configurations.archives
+                    }*/
                     name = PUBLISH_ARTIFACT_ID
                     description = 'A library to manage Date & Time with a single UI component.'
                     url = 'https://github.com/BobbySandhu/unified-date-time-picker'
@@ -74,12 +78,11 @@ afterEvaluate {
     }
 }
 
-/*
 signing {
-    useInMemoryPgpKeys(
+    /*useInMemoryPgpKeys(
             rootProject.ext["signing.keyId"],
             rootProject.ext["signing.key"],
             rootProject.ext["signing.password"],
-    )
+    )*/
     sign publishing.publications
-}*/
+}

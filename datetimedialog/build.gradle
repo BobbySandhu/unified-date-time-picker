@@ -5,7 +5,7 @@ plugins {
 
 ext {
     // Provide your own coordinates here
-    PUBLISH_GROUP_ID = 'io.github.BobbySandhu'
+    PUBLISH_GROUP_ID = 'io.github.bobbysandhu'
     PUBLISH_VERSION = '1.0.0'
     PUBLISH_ARTIFACT_ID = 'unified-date-time-picker'
 }
@@ -20,7 +20,7 @@ android {
         minSdk 21
         targetSdk 31
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
