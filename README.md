@@ -66,9 +66,9 @@ With all these customizations applied, it would look like:
         mavenCentral()
     }
     
-    // Project level dependencies section
+    // app level dependencies section
     dependencies {
-        implementation 'io.github.bobbysandhu:unified-date-time-picker:1.0.1'
+        implementation 'io.github.bobbysandhu:unified-date-time-picker:1.0.2'
     }
 
 Want to extend the feature, have any improvement or bug fix? 
